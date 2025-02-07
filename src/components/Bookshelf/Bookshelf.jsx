@@ -2,24 +2,25 @@ import React, { useState } from 'react';
 import './Bookshelf.css';
 
 const Bookshelf = () => {
-    const [bookTitle, setBookTitle] = useState('');
-    const [bookAuthor, setBookAuthor] = useState('');
-    const [books, setBooks] = useState([]);
+    const [books, setBooks] = useState([
+        { title: 'Stone Butch Blues', author: 'Leslie Feinberg' },
+        { title: 'Another Country', author: 'James Baldwin' }
+    ]);
+    const [newBook, setNewBook] = useState({ title: '', author: '' });
 
-    const handleTitleChange = (event) => {
-        setBookTitle(event.target.value);
-    };
-
-    const handleAuthorChange = (event) => {
-        setBookAuthor(event.target.value);
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setNewBook((prevBook) => ({
+            ...prevBook,
+            [name]: value,
+        }));
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (bookTitle && bookAuthor) {
-            setBooks([...books, { title: bookTitle, author: bookAuthor }]);
-            setBookTitle('');
-            setBookAuthor('');
+        if (newBook.title && newBook.author) {
+            setBooks([...books, { ...newBook }]);
+            setNewBook({ title: '', author: '' });
         }
     };
 
@@ -30,15 +31,17 @@ const Bookshelf = () => {
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
+                        name="title"
                         placeholder="Book Title"
-                        value={bookTitle}
-                        onChange={handleTitleChange}
+                        value={newBook.title}
+                        onChange={handleInputChange}
                     />
                     <input
                         type="text"
+                        name="author"
                         placeholder="Author"
-                        value={bookAuthor}
-                        onChange={handleAuthorChange}
+                        value={newBook.author}
+                        onChange={handleInputChange}
                     />
                     <button type="submit">Add Book</button>
                 </form>
